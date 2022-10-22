@@ -4,12 +4,12 @@ const { v4 } = require("uuid");
 exports.createCategory = async (req, res) => {
   try {
     const { name } = req.body;
-    const user = { name, id: v4() };
+    const category = { name, id: v4() };
 
     fs.readFile("./database.json", "utf-8", (err, data) => {
       if (err) new Error(err);
       const newArr = JSON.parse(data);
-      newArr.categories.push(user);
+      newArr.categories.push(category);
       fs.writeFile(
         "./database.json",
         JSON.stringify(newArr),
@@ -17,7 +17,9 @@ exports.createCategory = async (req, res) => {
       );
     });
 
-    res.status(200).send("Category created.");
+    res
+      .status(200)
+      .send(`Category ${category.name} created with id - ${category.id}.`);
   } catch (error) {
     console.log(error);
     res.status(400).send("Creation failed.");

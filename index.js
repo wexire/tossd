@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const fs = require("fs");
 const userRouter = require("./routes/users.js");
 const categoryRouter = require("./routes/categories.js");
+const recordsRouter = require("./routes/records.js");
 
 const app = express();
 
@@ -20,5 +21,6 @@ fs.writeFileSync("./database.json", JSON.stringify(DEFAULT_DB));
 
 app.use("/users", userRouter);
 app.use("/categories", categoryRouter);
+app.use("/records", recordsRouter);
 
 app.listen(PORT, () => console.log(`App running on port ${PORT}...`));

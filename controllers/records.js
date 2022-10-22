@@ -1,15 +1,21 @@
 const fs = require("fs");
 const { v4 } = require("uuid");
 
-exports.createUser = async (req, res) => {
+exports.createRecord = async (req, res) => {
   try {
-    const { name } = req.body;
-    const user = { name, id: v4() };
+    const { userId, categoryId, expenses } = req.body;
+    const record = {
+      userId,
+      categoryId,
+      createdAt: new Date(),
+      id: v4(),
+      expenses,
+    };
 
     fs.readFile("./database.json", "utf-8", (err, data) => {
       if (err) new Error(err);
       const newArr = JSON.parse(data);
-      newArr.users.push(user);
+      newArr.records.push(record);
       fs.writeFile(
         "./database.json",
         JSON.stringify(newArr),
@@ -17,7 +23,7 @@ exports.createUser = async (req, res) => {
       );
     });
 
-    res.status(200).send(`User ${user.name} created with id - ${user.id}.`);
+    res.status(200).send("Record created.");
   } catch (error) {
     console.log(error);
     res.status(400).send("Creation failed.");
