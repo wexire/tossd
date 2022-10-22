@@ -40,3 +40,20 @@ exports.getUserRecords = async (req, res) => {
     res.status(400).send("Request failed.");
   }
 };
+
+exports.getUserRecordsByCategory = async (req, res) => {
+  try {
+    const { userId, categoryId } = req.params;
+
+    fs.readFile("./database.json", "utf-8", (err, data) => {
+      if (err) new Error(err);
+      const records = JSON.parse(data).records.filter(
+        (record) => record.userId === userId && record.categoryId === categoryId
+      );
+      res.status(200).json(records);
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("Request failed.");
+  }
+};
