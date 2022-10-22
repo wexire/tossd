@@ -25,3 +25,15 @@ exports.createCategory = async (req, res) => {
     res.status(400).send("Creation failed.");
   }
 };
+
+exports.getCategories = async (req, res) => {
+  try {
+    fs.readFile("./database.json", "utf-8", (err, data) => {
+      if (err) new Error(err);
+      res.status(200).json(JSON.parse(data).categories);
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("Request failed.");
+  }
+};
