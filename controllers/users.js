@@ -23,3 +23,20 @@ exports.createUser = async (req, res) => {
     res.status(400).send("Creation failed.");
   }
 };
+
+exports.getUserRecords = async (req, res) => {
+  try {
+    const { id: userId } = req.params;
+
+    fs.readFile("./database.json", "utf-8", (err, data) => {
+      if (err) new Error(err);
+      const records = JSON.parse(data).records.filter(
+        (record) => record.userId === userId
+      );
+      res.status(200).json(records);
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("Request failed.");
+  }
+};
