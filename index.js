@@ -1,10 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const fs = require("fs");
 const userRouter = require("./routes/users.js");
 const categoryRouter = require("./routes/categories.js");
 const recordsRouter = require("./routes/records.js");
 const dotenv = require("dotenv");
+const { default: mongoose } = require("mongoose");
 
 const app = express();
 dotenv.config();
