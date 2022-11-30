@@ -1,3 +1,4 @@
+const categoryModel = require("../models/category");
 const recordModel = require("../models/record");
 const userModel = require("../models/user");
 
@@ -30,6 +31,10 @@ exports.getUserRecords = async (req, res) => {
 exports.getUserRecordsByCategory = async (req, res) => {
   try {
     const { userId, categoryId } = req.params;
+
+    const category = await categoryModel.findById(categoryId);
+
+    if (category.ownerId !== userId || null) throw Error("Invalid id");
 
     const records = await recordModel.find({
       $and: [{ userId }, { categoryId }],
