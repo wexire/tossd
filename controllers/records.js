@@ -7,7 +7,8 @@ exports.createRecord = async (req, res) => {
 
     const category = await categoryModel.findById(categoryId);
 
-    if (category.ownerId !== userId || null) throw Error("Invalid id");
+    if (!(category.ownerId === userId || category.ownerId === null))
+      throw Error("Invalid id");
 
     const record = await recordModel.create({
       userId,
