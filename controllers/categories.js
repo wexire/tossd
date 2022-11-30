@@ -1,39 +1,24 @@
-const fs = require("fs");
-const { v4 } = require("uuid");
+const categoryModel = require("../models/category");
 
 exports.createCategory = async (req, res) => {
   try {
-    const { name } = req.body;
-    const category = { name, id: v4() };
+    const { name, ownerId } = req.body;
+    const category = await categoryModel.create({ name, ownerId });
 
-    fs.readFile("./database.json", "utf-8", (err, data) => {
-      if (err) new Error(err);
-      const newArr = JSON.parse(data);
-      newArr.categories.push(category);
-      fs.writeFile(
-        "./database.json",
-        JSON.stringify(newArr),
-        (err) => new Error(err)
-      );
-    });
-
-    res
-      .status(200)
-      .send(`Category ${category.name} created with id - ${category.id}.`);
+    res.status(200).json(category);
   } catch (error) {
     console.log(error);
-    res.status(400).send("Creation failed.");
+    res.status(400).send(error.message);
   }
 };
 
 exports.getCategories = async (req, res) => {
   try {
-    fs.readFile("./database.json", "utf-8", (err, data) => {
-      if (err) new Error(err);
-      res.status(200).json(JSON.parse(data).categories);
-    });
+    const categories = await categoryModel.find({ ownerId: null });
+
+    res.status(200).json(categories);
   } catch (error) {
     console.log(error);
-    res.status(400).send("Request failed.");
+    res.status(400).send(error.message);
   }
 };

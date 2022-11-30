@@ -10,7 +10,7 @@ const userRouter = Router();
 userRouter.route("/").post(createUser);
 userRouter.route("/:id/records").get(getUserRecords);
 userRouter
-  .route("/:userId/category/:categoryId/records")
+  .route("/:userId/records/category/:categoryId")
   .get(getUserRecordsByCategory);
 
 module.exports = userRouter;

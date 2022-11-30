@@ -1,31 +1,24 @@
-const fs = require("fs");
-const { v4 } = require("uuid");
+const categoryModel = require("../models/category");
+const recordModel = require("../models/record");
 
 exports.createRecord = async (req, res) => {
   try {
     const { userId, categoryId, expenses } = req.body;
-    const record = {
+
+    const category = await categoryModel.findById(categoryId);
+
+    if (!(category.ownerId === userId || category.ownerId === null))
+      throw Error("Invalid id");
+
+    const record = await recordModel.create({
       userId,
       categoryId,
-      createdAt: new Date(),
-      id: v4(),
       expenses,
-    };
-
-    fs.readFile("./database.json", "utf-8", (err, data) => {
-      if (err) new Error(err);
-      const newArr = JSON.parse(data);
-      newArr.records.push(record);
-      fs.writeFile(
-        "./database.json",
-        JSON.stringify(newArr),
-        (err) => new Error(err)
-      );
     });
 
-    res.status(200).send("Record created.");
+    res.status(200).json(record);
   } catch (error) {
     console.log(error);
-    res.status(400).send("Creation failed.");
+    res.status(400).send(error.message);
   }
 };

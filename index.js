@@ -1,26 +1,28 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const fs = require("fs");
 const userRouter = require("./routes/users.js");
 const categoryRouter = require("./routes/categories.js");
 const recordsRouter = require("./routes/records.js");
+const dotenv = require("dotenv");
+const { default: mongoose } = require("mongoose");
 
 const app = express();
+dotenv.config();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const PORT = process.env.PORT || 3000;
 
-const DEFAULT_DB = {
-  users: [],
-  categories: [],
-  records: [],
-};
-
-fs.writeFileSync("./database.json", JSON.stringify(DEFAULT_DB));
-
 app.use("/users", userRouter);
 app.use("/categories", categoryRouter);
 app.use("/records", recordsRouter);
 
-app.listen(PORT, () => console.log(`App running on port ${PORT}...`));
+mongoose
+  .connect(process.env.CONNECTION_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() =>
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+  )
+  .catch((err) => console.log(err.message));
