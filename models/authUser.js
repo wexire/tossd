@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = mongoose.Schema({
+const authUserSchema = mongoose.Schema({
   email: { type: String, required: [true, "Email required"], trim: true },
   password: {
     type: String,
@@ -17,6 +17,6 @@ var validateEmail = function (email) {
   return re.test(email);
 };
 
-const userModel = mongoose.model("user", userSchema);
+const authUserModel = mongoose.model("authUser", authUserSchema);
 
-module.exports = userModel;
+module.exports = authUserModel;
