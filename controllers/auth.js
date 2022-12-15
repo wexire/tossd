@@ -1,9 +1,9 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-import authUserModel from "../models/authUser";
+const authUserModel = require("../models/authUser");
 
-export const signin = async (req, res) => {
+exports.signin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -19,20 +19,24 @@ export const signin = async (req, res) => {
       return res.status(400).json({ message: "Invalid password." });
     }
 
-    const token = jwt.sign({ email: user.email, id: user._id }, "test", {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { email: user.email, id: user._id },
+      process.env.JWT_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     res.status(200).json({
       result: user,
-      token,
+      token: `Bearer ${token}`,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const signup = async (req, res) => {
+exports.signup = async (req, res) => {
   try {
     const { email, password } = req.body;
 

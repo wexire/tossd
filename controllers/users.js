@@ -34,7 +34,8 @@ exports.getUserRecordsByCategory = async (req, res) => {
 
     const category = await categoryModel.findById(categoryId);
 
-    if (category.ownerId !== userId || null) throw Error("Invalid id");
+    if (!(category.ownerId !== null || category.ownerId !== userId))
+      throw Error("Invalid id");
 
     const records = await recordModel.find({
       $and: [{ userId }, { categoryId }],
