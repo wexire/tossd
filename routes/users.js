@@ -4,13 +4,14 @@ const {
   getUserRecords,
   getUserRecordsByCategory,
 } = require("../controllers/users.js");
+const auth = require("../middlewares/auth.js");
 
 const userRouter = Router();
 
-userRouter.route("/").post(createUser);
-userRouter.route("/:id/records").get(getUserRecords);
+userRouter.route("/").post(auth, createUser);
+userRouter.route("/:id/records").get(auth, getUserRecords);
 userRouter
   .route("/:userId/records/category/:categoryId")
-  .get(getUserRecordsByCategory);
+  .get(auth, getUserRecordsByCategory);
 
 module.exports = userRouter;

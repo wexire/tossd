@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
 
 const authUserSchema = mongoose.Schema({
-  email: { type: String, required: [true, "Email required"], trim: true },
+  email: {
+    type: String,
+    required: [true, "Email required"],
+    trim: true,
+    // match: [validateEmail, "Invalid email address"],
+    unique: true,
+  },
   password: {
     type: String,
     trim: true,
-    validate: [validateEmail, "Invalid email address"],
-    unique: true,
-    required: [true, "password required"],
+    required: [true, "Password required"],
     min: [8, "At least 8 characters required"],
   },
 });
